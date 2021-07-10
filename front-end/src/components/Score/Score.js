@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Score({score, url}) {
     const classes = useStyles()
-
+console.log(url)
     const orderByTime = (arrayOfArrays) => {
         let fixedData = arrayOfArrays.map(array => {
             let newArray = array.sort(function(a,b){
@@ -61,7 +61,7 @@ export default function Score({score, url}) {
 
 // eslint-disable-next-line
                  useEffect(async () => {
-                     console.log(process.env)
+                     console.log(url)
                      console.log("epa")
                  await axios.get(process.env.url)
                 .then(response => {
