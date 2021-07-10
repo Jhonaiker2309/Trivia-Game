@@ -5,17 +5,24 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   root: {
-    marginLeft: "180vh",
-}});
+    background: "#03254c",
+    padding: "2vh",
+    "& h1": {
+        color: "white"
+    },
+    height: "100%"
+},
+  chronometer: {
+      color: "white"
+  }
+});
 
-export default function FullCard({changeTime, ready, activateButtons,nextQuestion,numberOfCurrentQuestion}) {
+export default function FullCard({clockWorking,result, url, changeTime, ready, activateButtons,nextQuestion,numberOfCurrentQuestion}) {
     const classes = useStyles()
     return (
-        <div>
         <div className={classes.root}>
-        <Chronometer changeTime={changeTime} />
-        </div>
-        <Card ready ={ready} activateButtons ={activateButtons} nextQuestion={nextQuestion} numberOfCurrentQuestion={numberOfCurrentQuestion}/>
+        <Chronometer className={classes.chronometer} changeTime={changeTime} clockWorking={clockWorking} />
+        <Card result={result} url={url} ready={ready} activateButtons ={activateButtons} nextQuestion={nextQuestion} numberOfCurrentQuestion={numberOfCurrentQuestion}/>
         </div>
     )
 }
