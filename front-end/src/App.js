@@ -10,7 +10,6 @@ require("dotenv").config()
     
 
 export default function App() {
-    const url = process.env.URL_DATA;
     const [clockWorking, setClockWorking] = useState(true)
     const [name, setName] = useState("")
     const [data, setData] = useState(dataImported)
@@ -98,7 +97,6 @@ export default function App() {
 
 
 
-
  return (
         <div>
              <Router>
@@ -107,10 +105,10 @@ export default function App() {
             <Home changeName={changeName} name={name}/>
           </Route>
           <Route path="/card">
-            <FullCard clockWorking={clockWorking} result={result} url={url} changeTime ={changeTime} ready = {ready} activateButtons = {activateButtons}  nextQuestion={nextQuestion} numberOfCurrentQuestion={numberOfCurrentQuestion}/>
+            <FullCard clockWorking={clockWorking} result={result} changeTime ={changeTime} ready = {ready} activateButtons = {activateButtons}  nextQuestion={nextQuestion} numberOfCurrentQuestion={numberOfCurrentQuestion}/>
           </Route>
           <Route path="/score">
-            <Score url={url} score={score}/>
+            <Score score={score}/>
           </Route>
 
 

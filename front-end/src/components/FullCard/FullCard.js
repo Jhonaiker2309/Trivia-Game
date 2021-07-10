@@ -17,12 +17,12 @@ const useStyles = makeStyles({
   }
 });
 
-export default function FullCard({clockWorking,result, url, changeTime, ready, activateButtons,nextQuestion,numberOfCurrentQuestion}) {
+export default function FullCard({clockWorking,result, changeTime, ready, activateButtons,nextQuestion,numberOfCurrentQuestion}) {
     const classes = useStyles()
     return (
         <div className={classes.root}>
         <Chronometer className={classes.chronometer} changeTime={changeTime} clockWorking={clockWorking} />
-        <Card result={result} url={url} ready={ready} activateButtons ={activateButtons} nextQuestion={nextQuestion} numberOfCurrentQuestion={numberOfCurrentQuestion}/>
+        <Card result={result} ready={ready} activateButtons ={activateButtons} nextQuestion={nextQuestion} numberOfCurrentQuestion={numberOfCurrentQuestion}/>
         </div>
     )
 }

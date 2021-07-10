@@ -97,7 +97,7 @@ export default function MediaCard({result, url,ready, numberOfCurrentQuestion, n
       e.preventDefault()
     }
     else {
-      axios.post(url,result)
+      axios.post(process.env.REACT_APP_URL_DATA,result)
     }
   }
 

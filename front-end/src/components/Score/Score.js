@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Table from "./Table/Table.js"
 import ButtonForPlayAgain from "./Button/Button"
 import React, {useEffect, useState} from 'react'
-require("dotenv").config()
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Score({score, url}) {
     const classes = useStyles()
-console.log(url)
     const orderByTime = (arrayOfArrays) => {
         let fixedData = arrayOfArrays.map(array => {
             let newArray = array.sort(function(a,b){
@@ -61,13 +59,11 @@ console.log(url)
 
 // eslint-disable-next-line
                  useEffect(async () => {
-                     console.log(url)
-                     console.log("epa")
-                 await axios.get(process.env.url)
+                 await axios.get(process.env.REACT_APP_URL_DATA)
                 .then(response => {
                     let dataOfMongoInOrder =  composeOfFunctions(response.data)
                     while(dataOfMongoInOrder.length > 10){
-                        axios.delete(url, `/${dataOfMongoInOrder[10]._id}`)
+                        axios.delete(process.env.REACT_APP_URL_DATA + `/${dataOfMongoInOrder[10]._id}`)
                         dataOfMongoInOrder.pop()
                     }
                     setData(dataOfMongoInOrder)

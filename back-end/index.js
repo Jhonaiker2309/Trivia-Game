@@ -56,5 +56,5 @@ app.delete("/result/:id", (req, res) => {
 });
 
 app.listen(process.env.PORT || 5000, function(){
-    console.log(process.env.MONGO_URL)
+    console.log("Server running")
 })
