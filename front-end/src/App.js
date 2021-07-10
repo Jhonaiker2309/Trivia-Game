@@ -1,70 +1,55 @@
-
-import React, { Component } from "react";
-import data from "./data/data"
+import React, {useState, useEffect} from 'react'
+import dataImported from "./data/data"
 import Score from "./components/Score/Score"
 import FullCard from "./components/FullCard/FullCard"
-import Game from "./components/Game/Game"
 import Home from "./components/Home/Home"
-import {  BrowserRouter as Router,Switch,Route} from "react-router-dom";
+import {  BrowserRouter as Router,Switch,Route} from "react-router-dom"
 
+require("dotenv").config()
 
-export default class App extends Component {
-  state = {
-    name: "",
-    data:[],
-    score:0,
-    numberOfCurrentQuestion: 0,
-    ready: false,
-    time:0
-  }
+    
 
-    componentDidMount (){
-    let currentQuestion =   data[0]
-    this.setState({data, currentQuestion})
-
-  }
-
-  changeName = (e) => {
-    this.setState({name: e})
-  }
-
-
-  changeStateOfButtons = (idOfQuestion, idOfAnswer) => {
-    let data = this.state.data
-    let questionOfArray = data.find(question => question.id === idOfQuestion)
-    let positionOfQuestionInArray = data.indexOf(questionOfArray)
-    let answers = questionOfArray.answers
-    let AnswersAfterChanges = answers.map(answer => {
-      if(answer.id === idOfAnswer){
-        answer.isActive = true
-      } else {
-        answer.isActive = false
-      }
-      return answer
+export default function App() {
+    const url = process.env.URL;
+    const [clockWorking, setClockWorking] = useState(true)
+    const [name, setName] = useState("")
+    const [data, setData] = useState(dataImported)
+    const [score, setScore] = useState(0)
+    const [numberOfCurrentQuestion, setNumberOfCurrentQuestion] = useState(0)
+    const [ready, setReady] = useState(false)
+    const [time, setTime] = useState(0)
+    const [result, setResult] = useState({
+      name: "",
+      time: 0,
+      score: 0,
+      _id: ""
     })
 
-    questionOfArray.answers = AnswersAfterChanges
+    useEffect( () => {
+
+        setResult({...result,name: name, time: time, score: score})
+        // eslint-disable-next-line 
+    }, [ name, score])
+
+
+    const changeName = (e) => {
+    setName(e)
+  }
+
+
+   const nextQuestion = () => {
+    if(numberOfCurrentQuestion !== 9){
+      setNumberOfCurrentQuestion(numberOfCurrentQuestion + 1)
+    }
+    else{
+      setReady(true)
+    }
+  }
+
+
+
+  const activateButtons =  (idOfAnswer, number) => {
     
-    data[positionOfQuestionInArray] = questionOfArray
-
-    this.setState({data})
-    this.changeNumberOfActives()
-
-  }
-
-  nextQuestion = () => {
-    let numberOfCurrentQuestion = this.state.numberOfCurrentQuestion   
-    numberOfCurrentQuestion++
-    this.setState({numberOfCurrentQuestion})    
-  }
-
-  goToTheOtherPage = () => {
-    window.location.href = "http://localhost:3000/card"
-  }
-
-  activateButtons = (idOfAnswer) => {
-    let data = this.state.data
-    let numberOfCurrentQuestion = this.state.numberOfCurrentQuestion
     let currentQuestion = data[numberOfCurrentQuestion] 
     let answers = currentQuestion.answers
     let activeAnswers = answers.map(answer =>{
@@ -77,22 +62,21 @@ export default class App extends Component {
     currentQuestion.answers = activeAnswers
     data[currentQuestion] = currentQuestion
 
-  this.setState({data})
+  setData(data)
+
   setTimeout(() => {
-    this.nextQuestion()
+    nextQuestion()
   }, 600);
   
-    this.getResultOfGame()
+    getResultOfGame()
+    if(numberOfCurrentQuestion === 9){
+      setClockWorking(false)
+    }
 
-  
-  if(this.state.numberOfCurrentQuestion === 8){
-    this.setState({ready : true})
-  }
   }
 
-  getResultOfGame =  () => {
-     let score = 0
-     let data = this.state.data
+  const getResultOfGame =  () => {
+     let points = 0
      let allAnswers = data.map(question => {
       return question.answers
     })
@@ -101,44 +85,38 @@ export default class App extends Component {
      // eslint-disable-next-line 
       allAnswers[i].forEach(answer => {
         if(answer.isTrue === true && answer.isSelected === true){          
-          score++
+          points++
         }
       })
     }
-    this.setState({score})
-    console.log(this.state.score)
+    setScore(points)
   }
 
-  changeTime = (time) => {
-    this.setState({time})
-    console.log(this.state.time)   
+  const changeTime = (time) => {
+    setTime(time)
   }
 
 
-  render() {
-    return (
-      <div>
-            <Router>
-      <div>
+
+
+ return (
+        <div>
+             <Router>
         <Switch>
           <Route exact path="/">
-            <Home changeName={this.changeName} name={this.state.name}/>
+            <Home changeName={changeName} name={name}/>
           </Route>
           <Route path="/card">
-            <FullCard changeTime ={this.changeTime} ready = {this.state.ready} activateButtons = {this.activateButtons}  nextQuestion={this.nextQuestion} numberOfCurrentQuestion={this.state.numberOfCurrentQuestion}/>
+            <FullCard clockWorking={clockWorking} result={result} url={url} changeTime ={changeTime} ready = {ready} activateButtons = {activateButtons}  nextQuestion={nextQuestion} numberOfCurrentQuestion={numberOfCurrentQuestion}/>
           </Route>
           <Route path="/score">
-            <Score score={this.state.score} />
-          </Route>
-          <Route path="/game">
-            <Game data={this.state.data} changeStateOfButtons={this.changeStateOfButtons}/>
+            <Score url={url} score={score}/>
           </Route>
 
 
         </Switch>
-      </div>
     </Router>
-      </div>
+        </div>
     )
-  }
+
 }

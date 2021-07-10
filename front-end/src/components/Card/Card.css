@@ -1,5 +1,5 @@
 .container {
-  background: "white";
+  background-color: "red";
   display: flex;
   justify-content: center;
   margin-top: 10%;

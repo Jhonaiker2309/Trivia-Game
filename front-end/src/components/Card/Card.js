@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom"
+import axios from "axios"
 import data from "../../data/data"
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -12,10 +13,14 @@ import Grid from '@material-ui/core/Grid';
 import "./Card.css"
 
 const useStyles = makeStyles({
+  container: {
+  background: "#1905a0"
+  },
   root: {
     width: "100vh",
-    height: "55vh",
-    background:"#FFB602"
+    height: "65vh",
+    background:"white",
+    
   },
   media: {
     height: 140,
@@ -24,7 +29,7 @@ const useStyles = makeStyles({
     textDecoration:"none"
   },
   inactive: {
-    background: '#C7FF30',
+    background: '#FFA900',
     width:"45vh",
     border: 0,
     borderRadius: 3,
@@ -33,11 +38,11 @@ const useStyles = makeStyles({
     height: 48,
     padding: '0 30px',
     '&:hover': {
-      background: "#84B307",
+      background: "#FF7600",
     },
   },
   correct: {
-    background: '#004CFF',
+    background: '#79D70F',
     width:"45vh",
     border: 0,
     borderRadius: 3,
@@ -46,11 +51,11 @@ const useStyles = makeStyles({
     height: 48,
     padding: '0 30px',
     '&:hover': {
-      background: "#004CFF",
+      background: "#79D70F",
     },
   },
   fail: {
-    background: '#FF1001',
+    backgroundColor:"#D32626",
     width:"45vh",
     border: 0,
     borderRadius: 3,
@@ -58,18 +63,22 @@ const useStyles = makeStyles({
     color: 'black',
     height: 48,
     '&:hover': {
-      background: "#FF1001",
+      background: "#D32626",
     }
   },
   question: {
     color: "#343F56",
     textSize: "24px"
+  },
+  button: {
+    marginLeft: "40vh",
+    marginTop: "1vh"
   }
 });
 
 
 
-export default function MediaCard({ready, numberOfCurrentQuestion, nextQuestion, activateButtons}) {
+export default function MediaCard({result, url,ready, numberOfCurrentQuestion, nextQuestion, activateButtons}) {
 
   const returnClass = (answer) => {
   if(answer.isActive && answer.isTrue){
@@ -87,12 +96,17 @@ export default function MediaCard({ready, numberOfCurrentQuestion, nextQuestion,
     if(!ready){
       e.preventDefault()
     }
+    else {
+      axios.post(url,result)
+    }
   }
 
   const classes = useStyles();
 
   return (
+    <div classes={classes.container}>
     <div className="container">
+    
     <Card className={classes.root}>
       <CardActionArea>
           <Typography gutterBottom variant="h6" component="h2" align="center">
@@ -106,18 +120,25 @@ export default function MediaCard({ready, numberOfCurrentQuestion, nextQuestion,
       </CardActionArea>
       <CardActions>
       <Grid container spacing={4}>
-      {data[numberOfCurrentQuestion].answers.map(answer => (
+      {data[numberOfCurrentQuestion].answers.map((answer, i) => (
         
-        <Grid item xs={6}>
-        <Link to="/score" className={classes.link} onClick={e => disableLink(ready, e)}>
-        <Button className={returnClass(answer)} onClick={()=> activateButtons(answer.id)}>{answer.text}</Button>
-        </Link>
+        <Grid item xs={6} key={i}>
+        
+        <Button className={returnClass(answer)} onClick={()=> activateButtons(answer.id, numberOfCurrentQuestion)}>{answer.text}</Button>
+
         </Grid>
       ))}
       </Grid>
-      </CardActions>
 
+      </CardActions>
+      <Link to="/score" className={classes.link} onClick={e => disableLink(ready, e)}>
+      <Button variant={ready ? "contained": "outlined"} color="primary" size="large" className={classes.button} >
+        Enviar
+      </Button>
+      </Link>
+        
     </Card>
+    </div>
     </div>
   );
 }
