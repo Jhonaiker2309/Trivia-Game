@@ -10,7 +10,7 @@ require("dotenv").config()
     
 
 export default function App() {
-    const url = process.env.URL;
+    const url = process.env.URL_DATA;
     const [clockWorking, setClockWorking] = useState(true)
     const [name, setName] = useState("")
     const [data, setData] = useState(dataImported)
