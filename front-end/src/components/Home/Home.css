@@ -1,0 +1,9 @@
+.Home{
+    color: red;
+    background-color: #E8F0F2;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center
+
+}
