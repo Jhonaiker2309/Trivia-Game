@@ -2,6 +2,9 @@ const express = require( "express" )
 const app = express()
 const cors = require( "cors" )
 const mongoose = require( "mongoose" )
+const MongoClient = require( "mongodb" ).MongoClient
+
+
 const Schema = mongoose.Schema
 require( "dotenv" ).config()
 
@@ -17,6 +20,7 @@ mongoose.connect( process.env.MONGO_URL, {
   useUnifiedTopology: true
 } );
 
+
 const resultSchema = {
   name: String,
   time: Number,
@@ -28,14 +32,15 @@ const resultadoTotal = new Schema( resultSchema )
 
 const Result = mongoose.model( "Result", resultadoTotal )
 
-app.get( "/result", async ( req, res ) => {
-  await Result.find()
+
+app.get( "/result", ( req, res ) => {
+  Result.find()
     .then( ( results ) => res.json( results ) )
     .catch( ( err ) => res.status( 400 ).json( "Error: " + err ) )
 } )
 
 app.post( "/result", async ( req, res ) => {
-  const newResult = new Result( {
+  const newResult = await new Result( {
     name: req.body.name,
     time: req.body.time,
     score: req.body.score
@@ -50,7 +55,7 @@ app.post( "/result", async ( req, res ) => {
 app.delete( "/result/:id", async ( req, res ) => {
   const id = req.params.id;
 
-  await Result.findByIdAndDelete
+  await Result.findByIdAndDelete( id )
     .then( {
       _id: id
     }, ( req, res, err ) => {
@@ -61,13 +66,11 @@ app.delete( "/result/:id", async ( req, res ) => {
       }
     } )
     .catch( err => console.log( err ) );
+
+
 } );
 
-app.use( express.static( 'client/build' ) );
-app.get( "*", ( req, res ) => {
-  res.sendFile( path.resolve( __dirname, 'client', 'build', 'index.html' ) );
-} )
 
-app.listen( process.env.PORT || 5000, function () {
-  console.log( "Server running" )
+app.listen( process.env.PORT || 5000, () => {
+  console.log( "active" )
 } )
