@@ -16,7 +16,7 @@ export default function ButtonForPlayAgain() {
     }
     return (
         <div>
-        <Button variant="contained" color="primary" size="large" onClick={playAgain} className={classes.root} justify = "center">
+        <Button variant="contained" color="primary" size="large" onClick={() => playAgain()} className={classes.root} justify = "center">
           Play Again
         </Button>
         </div>
