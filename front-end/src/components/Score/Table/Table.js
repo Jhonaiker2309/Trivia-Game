@@ -98,7 +98,7 @@ const queryClient = new QueryClient();
 		fetch(process.env.REACT_APP_BACK_END).then((res) =>
 			res.json(),
 			),
-		);
+		);  
 
 
 
