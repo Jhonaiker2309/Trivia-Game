@@ -13,7 +13,7 @@ app.use(express.urlencoded({extended: true}))
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true}
 );
 
-const resultSchema ={
+const resultSchema ={  
   name: String,
   time: Number,
   score: Number
